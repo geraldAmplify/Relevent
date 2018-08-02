@@ -1,0 +1,346 @@
+#onboarding-layer {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: scroll; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.2); /* Black w/ opacity */
+}
+#onboarding-modal {
+    display: none;
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    z-index: 1; /* Sit on top */
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    height: 80%;
+    width: 90%;
+    border-radius: 10px;
+    padding: 15px 20px 20px 20px;
+}
+/* Slideshow container */
+.slideshow-container {
+    height: 85%;
+    width: 100%;
+    position: relative;
+    margin: auto;
+}
+/* Next & previous buttons */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+}
+/* Position the "next" and "prev" buttons */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+    margin-right: -15px;
+}
+.prev {
+    margin-left: -15px;
+}
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+    color: black;
+}
+/* Caption title */
+#onboarding-title {
+    color: black;
+    padding: 8px 12px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0;
+}
+#onboarding-img {
+    height:400px;
+    width: 310px !important;
+    margin: -20px auto;
+}
+/* Caption text */
+#onboarding-text {
+    color: black;
+    font-size: 15px;
+    padding: 0px 6px 20px 6px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+}
+/* The dots/bullets/indicators */
+.dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+.active, .dot:hover {
+    background-color: #717171;
+}
+/* Fading animation */
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+@-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+.fade:not(.show) {
+    opacity: 1 !important;
+}
+
+
+
+
+
+#header {
+	/*background-color: #6CC3D5;*/
+	height: 14%;
+}
+/*Top navigation bar*/
+#navigation {
+	height: 55%;
+    padding: 2% 0 2% 0;
+	background-color: #6CC3D5;
+}
+/*Logo*/
+#logoCol {
+    padding-left: 3%;
+}
+/*Search bar*/
+#search-location-form {
+    width: 100%;
+    height: 100%;
+}
+#search-location {
+	float: left;
+    width: 70%;
+	font-size: 11px;
+	height: 100%;
+}
+#search-location-btn {
+    color: #ffff;
+    width: 20%;
+    height: 100%;
+    background: #F3969A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#searchBarCol {
+	padding-left: 0px;
+	padding-right: 0px; 
+}
+/*Weather*/
+#weatherCol {
+	width: 100%;
+	padding-left: 0px;
+    padding-right: 3%;
+}
+#weather {
+    width: 100%;
+    font-size: 9px;
+    height: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/*Bottom navigation bar*/
+#settings {
+	height: 45%;
+	width: 100%;
+	padding: 1% 0 1% 0;
+	margin-left: -7px;
+	background-color: white;
+}
+#filters, #ages, #walk-time, #features {
+	font-size:11px;
+	text-align: center;
+	width: 25%;
+	height: 100%;
+	padding-left: 0;
+	padding-right: 0;
+    line-height: 1px;
+	background-color: white;
+	color: black;
+}
+#ages {
+    width: 20%;
+} 
+#walk-time {
+    width: 30%;
+}
+#settings-modal {
+	display: none;
+    position: fixed;
+    z-index: 1;
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.95);
+}
+/*Entire filter button*/
+#select-all, #select-active, #select-arts, #select-family, #select-food, #select-free, #select-music {
+	border: 1px solid #6CC3D5;
+	margin-top: 4%;
+	margin-bottom: 4%; 
+}
+/*Text of filter button*/
+#text-all, #text-active, #text-arts, #text-family, #text-food, #text-free, #text-music {
+    font-size: 11px;
+    margin-top: 10px;
+}
+/*Warning for requiring location*/
+#warning-modal {
+    display: none;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    z-index: 1; /* Sit on top */
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    height: 60%;
+    width: 80%;
+    border-radius: 10px;
+    padding: 15px 20px 20px 20px;
+}
+#use-my-location, #check-it-out {
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    width: 90%;
+    bottom: 5%;
+    right: 5%;
+}
+.close {
+    margin-right: -4%;
+    margin-top: -4%;
+}
+
+
+/* Google maps */
+#map {
+	height: 86%;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Walk time slider */
+.slidecontainer {
+    width: 100%;
+}
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+.slider:hover {
+    opacity: 1;
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #4286f4;
+    cursor: pointer;
+}
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4286f4;
+    cursor: pointer;
+}
+
+
+/* The events modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 90%; /* Location of the box */
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    /*background-color: rgb(0,0,0); /* Fallback color */
+    /*background-color: rgba(0,0,0,0.1); /* Black w/ opacity */
+}
+#moreInfoArrow {
+    display:block;
+    margin: 4% auto 8% auto;
+    width: 10%;
+}
+#events-modal {
+	overflow: scroll;
+}
+/* Entire modal dialog */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:100%; opacity:0} 
+    to {top:0; opacity:1}
+}
+@keyframes animatetop {
+    from {top:100%; opacity:0}
+    to {top:0; opacity:1}
+}
+/* Sections of the modal dialog */
+.modal-header {
+    background-color: #6CC3D5;
+}
+#modal-title {
+	color: white;
+}
+.modal-body {
+	margin-top: -5%;
+}
