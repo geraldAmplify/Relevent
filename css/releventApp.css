@@ -60,7 +60,7 @@
 /* Caption title */
 #onboarding-title {
     color: black;
-    padding: 8px 12px;
+    padding: 0px 12px;
     position: absolute;
     width: 100%;
     text-align: center;
@@ -69,7 +69,7 @@
 #onboarding-img {
     position: absolute;
     height: 80%;
-    top: 10%;
+    top: 8%;
 }
 /* Caption text */
 #onboarding-text {
