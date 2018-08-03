@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Relevent Now</title>
 	<!--Browser Icon-->
-	<link rel="shortcut icon" type="image/jpg" href="https://png.icons8.com/windows/1600/elephant.png"/>
+	<link rel="shortcut icon" type="image/jpg" href="https://www.w3schools.com/images/w3schools_green.jpg"/>
 	<!--css stylesheet-->
 	<link rel="stylesheet" href="css/releventApp.css">
 	<!--Bootstrap Skin-->
@@ -64,7 +64,7 @@
 					<div style="display: flex">
 			  			<img id="onboarding-img" src="designAssets/Illustration_Party_Elephant.svg" style="width:100%">
 			  		</div>
-			  		<div id="onboarding-text">A hyperlocal community event finder that uses your location to quickly find fun family activities</div>
+			  		<div id="onboarding-text">A community event finder that uses your location to quickly find fun family activities</div>
 				</div>
 
 				<div class="mySlides fade">
@@ -415,7 +415,6 @@
 
 		function initOnboarding() {
 			var myCookie = getCookie("name"); //get cookie if it exists
-			console.log(myCookie);
 		 	if (myCookie == null) { //no cookie exists yet, create one if requested
 		 		$('#onboarding-layer').show();
 		 		$('#onboarding-modal').show();
