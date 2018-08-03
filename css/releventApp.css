@@ -67,19 +67,23 @@
     margin-bottom: 0;
 }
 #onboarding-img {
-    height:400px;
-    width: 310px !important;
-    margin: -20px auto;
+    position: absolute;
+    height: 80%;
+    top: 10%;
 }
 /* Caption text */
 #onboarding-text {
     color: black;
     font-size: 15px;
-    padding: 0px 6px 20px 6px;
+    padding: 0px 6px 0px 6px;
     position: absolute;
-    bottom: 8px;
+    top: 85%;
     width: 100%;
     text-align: center;
+}
+#get-started {
+    position: absolute;
+    top: 90%;
 }
 /* The dots/bullets/indicators */
 .dot {
