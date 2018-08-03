@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Relevent Now</title>
 	<!--Browser Icon-->
-	<link rel="shortcut icon" type="image/jpg" href="https://png.icons8.com/windows/1600/elephant.png"/>
+	<link rel="shortcut icon" type="image/jpg" href="https://www.w3schools.com/images/w3schools_green.jpg"/>
 	<!--css stylesheet-->
 	<link rel="stylesheet" href="css/releventApp.css">
 	<!--Bootstrap Skin-->
@@ -21,41 +21,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 	<!--Axios CDN-->
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<!-- Hotjar Tracking Code for www.releventnow.co -->
-<script>
-    (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:916132,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-</script>
-	<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-T32J3ZW');</script>
-<!-- End Google Tag Manager -->
-	<!-- Facebook Pixel Code -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '2264863760198190');
-  fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=2264863760198190&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
 </head>
 
 <body>
@@ -99,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					<div style="display: flex">
 			  			<img id="onboarding-img" src="designAssets/Illustration_Party_Elephant.svg" style="width:100%">
 			  		</div>
-			  		<div id="onboarding-text">A hyperlocal community event finder that uses your location to quickly find family fun activities</div>
+			  		<div id="onboarding-text">A hyperlocal community event finder that uses your location to quickly find fun family activities</div>
 				</div>
 
 				<div class="mySlides fade">
@@ -116,9 +81,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			  			<img id="onboarding-img" src="designAssets/Illustration_Directions_Elephant.svg" style="width:100%">
 			  		</div>
 			  		<div id="onboarding-text">Search for an address or use your current location to find events a quick walk away</div>
-			  		<br>
-			  		<button class='btn btn-secondary btn-block' id="get-started" onclick='makeCookie()'>Let's Get Started!</button>
 				</div>
+				<div class="mySlides fade">
+					<h4 id="onboarding-title">Let's Get Started</h4>
+					<div style="display: flex">
+			  			<img id="onboarding-img" src="designAssets/Illustration_Activity_Elephant.svg" style="width:100%">
+			  		</div>
+			  		<button class='btn btn-secondary btn-block' id="get-started" onclick='makeCookie()'>Find Events</button>
+				</div>
+				
 
 				<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
 				<a class="next" onclick="plusSlides(1)">&#10095;</a>
@@ -129,6 +100,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			  	<span class="dot" onclick="currentSlide(1)"></span> 
 			  	<span class="dot" onclick="currentSlide(2)"></span> 
 			  	<span class="dot" onclick="currentSlide(3)"></span> 
+			  	<span class="dot" onclick="currentSlide(4)"></span>
 			</div>
 		</div>
 	</div>
