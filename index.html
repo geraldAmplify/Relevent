@@ -198,7 +198,7 @@
 			//Walk time settings
 		    $('#walk-time').click(function() {
 		    	switchSettingsModals();
-		    	settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" step="10" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><br><p style="font-size: 11px">Note: The walk time feature will not work unless when you have searched for an address or are using your current location!</p><button id="done-button" class="btn btn-info btn-block" onclick="switchSettingsModals()">Done!</button><br></div>';
+		    	settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" step="5" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><p style="font-size: 15px">Find events within a certain walking distance from your location!</p><p style="font-size: 11px">Note: An address or your location is required to use this feature.</p><button id="done-button" class="btn btn-info btn-block" onclick="switchSettingsModals()">Done!</button><br></div>';
 		    	//Walk time slider
 				var slider = document.getElementById("walkRangeSlider");
 				var output = document.getElementById("newWalkTime");
