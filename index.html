@@ -195,6 +195,15 @@
 				settingsModal.innerHTML = initCategories(categoryColors[0],categoryTextColors[0],categoryColors[1],categoryTextColors[1],categoryColors[2],categoryTextColors[2],categoryColors[3],categoryTextColors[3],categoryColors[4],categoryTextColors[4],categoryColors[5],categoryTextColors[5],categoryColors[6],categoryTextColors[6]);
 				$('#settings-modal').toggle();
 			});
+			
+			//Ages settings
+		    $('#ages').click(function() {
+		    	switchSettingsModals();
+		    	settingsModal.innerHTML = '<hr><div><h3>Feature Coming Soon!</h3><br></div>';
+		    	$('#settings-modal').toggle();
+		    });
+
+			
 			//Walk time settings
 		    $('#walk-time').click(function() {
 		    	switchSettingsModals();
