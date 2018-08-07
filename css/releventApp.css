@@ -182,10 +182,9 @@
 	margin-left: -7px;
 	background-color: white;
 }
-#filters, #ages, #walk-time, #features {
+#categories, #ages, #walk-time, #features {
 	font-size:11px;
 	text-align: center;
-	width: 25%;
 	height: 100%;
 	padding-left: 0;
 	padding-right: 0;
@@ -193,11 +192,17 @@
 	background-color: white;
 	color: black;
 }
+#categories {
+    width: 30%;
+}
 #ages {
     width: 20%;
 } 
 #walk-time {
     width: 30%;
+}
+#features {
+    width: 20%;
 }
 #settings-modal {
 	display: none;
@@ -307,7 +312,7 @@ html, body {
 #moreInfoArrow {
     display:block;
     margin: 4% auto 8% auto;
-    width: 10%;
+    width: 25%;
 }
 #events-modal {
 	overflow: scroll;
@@ -341,6 +346,7 @@ html, body {
 }
 #modal-title {
 	color: white;
+    margin-bottom: 0;
 }
 .modal-body {
 	margin-top: -5%;
