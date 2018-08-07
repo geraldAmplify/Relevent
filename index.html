@@ -209,7 +209,11 @@
 		settingsModal.style.display = "none";
 		//Get the modal for infocards
 		var modal = document.getElementById('events-modal');
-
+		//Switch settings modals
+		var isCategories = false;
+		var isAges = false;
+		var isWalkTime = false;
+		var isFeatures = false;
 
 		$(document).ready(function() {
 			//Initialize onboarding modal
@@ -226,19 +230,36 @@
 			});
 			//Filter settings
 			$('#categories').click(function() {
-				switchSettingsModals();
 				settingsModal.innerHTML = initCategories(categoryColors[0],categoryTextColors[0],categoryColors[1],categoryTextColors[1],categoryColors[2],categoryTextColors[2],categoryColors[3],categoryTextColors[3],categoryColors[4],categoryTextColors[4],categoryColors[5],categoryTextColors[5],categoryColors[6],categoryTextColors[6]);
-				$('#settings-modal').toggle();
+				if (isCategories == true) {
+					isCategories = false;
+					$('#settings-modal').hide();
+				} else {
+					isCategories = true;
+					isAges = false;
+					isWalkTime = false;
+					isFeatures = false;
+					$('#settings-modal').show();
+				}
+				
 			});
 			//Ages settings
 		    $('#ages').click(function() {
-		    	switchSettingsModals();
 		    	settingsModal.innerHTML = '<hr><div><h4>Feature Coming Soon!</h4><br></div>';
-		    	$('#settings-modal').toggle();
+		    	if (isAges == true) {
+					isAges = false;
+					$('#settings-modal').hide();
+				} else {
+					isCategories = false;
+					isAges = true;
+					isWalkTime = false;
+					isFeatures = false;
+					$('#settings-modal').show();
+				}
+				
 		    });
 			//Walk time settings
 		    $('#walk-time').click(function() {
-		    	switchSettingsModals();
 		    	settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" step="5" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><p style="font-size: 15px">Find events within a certain walking distance from your location!</p><p style="font-size: 11px">Note: An address or your location is required to use this feature.</p><button id="done-button" class="btn btn-info btn-block" onclick="switchSettingsModals()">Done!</button><br></div>';
 		    	//Walk time slider
 				var slider = document.getElementById("walkRangeSlider");
@@ -259,13 +280,32 @@
 					slider.disabled = true;
 				}
 				
-				$('#settings-modal').toggle();
+				if (isWalkTime == true) {
+					isWalkTime = false;
+					$('#settings-modal').hide();
+				} else {
+					isCategories = false;
+					isAges = false;
+					isWalkTime = true;
+					isFeatures = false;
+					$('#settings-modal').show();
+				}
+				
 		    });
 		    //Additional features settings
 		    $('#features').click(function() {
-		    	switchSettingsModals();
 		    	settingsModal.innerHTML = '<hr><div><button id="help-me-button" class="btn btn-info btn-block" onclick="getClosestEventControl()">The kids are crazy. Help me!</button><br></div>';
-		    	$('#settings-modal').toggle();
+		    	if (isFeatures == true) {
+		    		isFeatures = false;
+					$('#settings-modal').hide();
+				} else {
+					isCategories = false;
+					isAges = false;
+					isWalkTime = false;
+					isFeatures = true;
+					$('#settings-modal').show();
+				}
+				
 		    });
 		    //Close infocards
 		    $('#modal-close').click(function() {
