@@ -14,12 +14,12 @@
     display: none;
     position: absolute;
     top: 15%;
-    left: 5%;
+    left: 7.5%;
     z-index: 1; /* Sit on top */
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     height: 80%;
-    width: 90%;
+    width: 85%;
     border-radius: 10px;
     padding: 15px 20px 20px 20px;
 }
@@ -129,7 +129,7 @@
 /*Top navigation bar*/
 #navigation {
 	height: 55%;
-    padding: 2% 0 2% 0;
+    padding: 1.5% 0 1.5% 0;
 	background-color: #6CC3D5;
 }
 /*Logo*/
@@ -204,6 +204,10 @@
 #features {
     width: 20%;
 }
+#category-icons {
+    width: 25%;
+    padding-top: 5%;
+}
 #settings-modal {
 	display: none;
     position: fixed;
@@ -222,7 +226,7 @@
 /*Text of filter button*/
 #text-all, #text-active, #text-arts, #text-family, #text-food, #text-free, #text-music {
     font-size: 11px;
-    margin-top: 10px;
+    margin-bottom: 5%;
 }
 /*Warning for requiring location*/
 #warning-modal {
