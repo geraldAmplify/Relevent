@@ -202,7 +202,8 @@
 		var selectFree = false;
 		var selectMusic = false;
 		var categoryColors = ['#6CC3D5','white','white','white','white','white','white'];
-		var categoryTextColors = ['white','black','black','black','black','black','black'];
+		var categoryTextColors = ['white','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5'];
+		var categoryIconColors = ["White", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"];
 
 		//Get the modal for walkTime
 		var settingsModal = document.getElementById('settings-modal');
@@ -221,6 +222,10 @@
 			//Location search bar
 			$('#search-location').click(function() {
 				closeSettingsModals();
+				isCategories = false;
+				isAges = false;
+				isWalkTime = false;
+				isFeatures = false;
 				setTimeout(function () {
 			        let viewheight = parseInt($(window).height(), 10);
 			        let viewwidth = parseInt($(window).width(), 10);
@@ -310,7 +315,12 @@
 		    //Close infocards
 		    $('#modal-close').click(function() {
 		    	setZoom();
+		    	isCategories = false;
+		    	isAges = false;
+				isWalkTime = false;
+				isFeatures = false;
 		    	$('#events-modal').hide();
+				
 		    });
 		});
 
@@ -400,16 +410,27 @@
 			for (var j = 0; j < eventsToday.length; j++) {
 				addMarker({
 					coords: {lat: eventsToday[j].lat, lng: eventsToday[j].lng},
-					content: [eventsToday[j].name, eventsToday[j].address, -1, eventsToday[j].description]
+					content: [eventsToday[j].name, eventsToday[j].address, -1, eventsToday[j].description],
+					iconImage: "designAssets/EventPin.png"
 				});
 			}
 			//When the user clicks anywhere outside of the infocard modal, close it
 		    window.onclick = function(event) {
 		    	if (event.target == modal) {
+		    		isCategories = false;
+					isAges = false;
+					isWalkTime = false;
+					isFeatures = false;
 			    	setZoom();
 			        modal.style.display = "none";
 			    }
 		    }
+		    $('#map').click(function() {
+		    	isCategories = false;
+				isAges = false;
+				isWalkTime = false;
+				isFeatures = false;
+		    });
 	      			
 	    }
 
@@ -451,7 +472,7 @@
 						    }, 2000);
 						    addMarkerCurPos({
 			            		coords: pos, 
-			            		iconImage: "designAssets/UserLocation.png"
+			            		iconImage: "designAssets/UserPin.png"
 			            	});
 			            	//Clear text field
 							document.getElementById('search-location').value = "";
@@ -611,19 +632,21 @@
         	eventMarkers = [];
   		}
 
-  		//Init for "Help Me" feature
+  		//Get nearest event for "Help Me" feature
   		var nearestEventNum;
   		//Update map with events that are within walking distance
   		function getEvents(events) {
   			var nearestEventWalkTime = 1000;
   			var nearestEventTemp = 0;
+
   			for (var i = 0; i < events.length; i++) {
   				eventWalkTimes[i] = calculateWalkTime(cur_lat, cur_lng, events[i].lat, events[i].lng);
   				//No location submitted
   				if (isNaN(eventWalkTimes[i])) {
   					addMarker({
 						coords: {lat: events[i].lat, lng: events[i].lng},
-						content: [events[i].name, events[i].address, -1, events[i].description]
+						content: [events[i].name, events[i].address, -1, events[i].description],
+						iconImage: "designAssets/EventPin.png"
 					});
   				} 
   				//Location submitted
@@ -631,7 +654,8 @@
   					nearestEventTemp++;
   					addMarker({
 						coords: {lat: events[i].lat, lng: events[i].lng},
-						content: [events[i].name, events[i].address, eventWalkTimes[i], events[i].description]
+						content: [events[i].name, events[i].address, eventWalkTimes[i], events[i].description],
+						iconImage: "designAssets/EventPin.png"
 					});
   					//get nearest event to user
   					if (eventWalkTimes[i] < nearestEventWalkTime) {
@@ -695,7 +719,7 @@
 	            	}
 	        		addMarkerCurPos({
 	            		coords: pos, 
-	            		iconImage: "designAssets/GreenPin.png"
+	            		iconImage: "designAssets/SearchPin.png"
 	            	});
 	            	map.setCenter(pos);
 	            	setZoom();
@@ -711,51 +735,6 @@
 			}); 
 			
 		}
-
-		//Convert address to lat,lng - Create own events
-		// function geocode(e) {
-		// 	e.preventDefault();
-		// 	//Get event parameters
-		// 	var eventLocation = document.getElementById('new-event-location').value;
-		// 	var eventName = document.getElementById('new-event-name').value;
-		// 	var eventDescription = document.getElementById('new-event-description').value;
-		// 	//Convert addr to lat,lng
-		// 	axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-		// 		params: {
-		// 			address: eventLocation,
-		// 			key: 'AIzaSyBLcLmEXKhLUdhDY8RiQyu24dCuw592G-c'
-		// 		}
-		// 	})
-		// 	.then(function(response){
-		// 		var lat = response.data.results[0].geometry.location.lat;
-		// 		var lng = response.data.results[0].geometry.location.lng;
-
-		// 		//Has current location
-		// 		if (cur_lat != undefined && cur_lng != undefined) {
-		// 			walkTime = calculateWalkTime(cur_lat, cur_lng, lat, lng);
-		// 			if (walkTime <= walkTimeLimit) {
-		// 				addMarker({
-		// 					coords: {lat: lat, lng: lng},
-		// 					content: '<h1>' + eventName + '</h1>' +	
-		// 							 '<br>' +
-		// 							 '<p><strong>' + eventLocation + '</strong></p>' +
-		// 							 '<button onclick="getDirections(\'' + curLocation + '\',\'' + eventLocation + '\')">Get Directions</button>' +
-		// 							 '<p>' + eventDescription + '</p>'
-		// 				});
-		// 			}
-		// 		} else {
-		// 			//Need current location
-		// 		}
-		// 		//Clear text fields
-		// 		document.getElementById('new-event-location').value = "";
-		// 		document.getElementById('new-event-name').value = "";
-		// 		document.getElementById('new-event-description').value = "";
-				
-		// 	})
-		// 	.catch(function(error){
-		// 		console.log(error);
-		// 	});
-		// }
 
 		//Convert lat,lng to address
 		function reverseGeocode(cur_lat, cur_lng) {
@@ -835,7 +814,6 @@
 			day = parseInt(splitted[2]);
 			return [year, month, day];
 		}
-		//'<span class="fa fa-car fa-2x"></span>' +
 		//Initialize filters setting
 		function initCategories(allBtn,allTxt,activeBtn,activeTxt,artsBtn,artsTxt,familyBtn,familyTxt,foodBtn,foodTxt,freeBtn,freeTxt,musicBtn,musicTxt) {
 			return '<div class="container-fluid">' +
@@ -843,36 +821,43 @@
 					'<div class="row">' +
 						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+allBtn+'" id="select-all" onclick="updateAll()">' +
+                            		'<img id="category-icons" src="designAssets/All_Icon_'+categoryIconColors[0]+'.svg">' +
                                     '<h6 id="text-all" style="color:'+allTxt+'">All</h6>' +
                             '</button>' +
 						'</div>' +
 						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+activeBtn+'" id="select-active" onclick="updateActive()">' +
+                            		'<img id="category-icons" src="designAssets/Active_Icon_'+categoryIconColors[1]+'.svg">' +
                                     '<h6 id="text-active" style="color:'+activeTxt+'">Active</h6>' +
                             '</button>' +
 						'</div>' +
 						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+artsBtn+'" id="select-arts" onclick="updateArts()">' +
+                            		'<img id="category-icons" src="designAssets/Arts_Icon_'+categoryIconColors[2]+'.svg">' +
                                     '<h6 id="text-arts" style="color:'+artsTxt+'">Arts</h6>' +
                             '</button>' +
 						'</div>' +
 						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+familyBtn+'" id="select-family" onclick="updateFamily()">' +
+                            		'<img id="category-icons" src="designAssets/Family_Icon_'+categoryIconColors[3]+'.svg">' +
                                     '<h6 id="text-family" style="color:'+familyTxt+'">Family</h6>' +
                             '</button>' +
 						'</div>' +
 						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+foodBtn+'" id="select-food" onclick="updateFood()">' +
+                            		'<img id="category-icons" src="designAssets/Food_Icon_'+categoryIconColors[4]+'.svg">' +
                                     '<h6 id="text-food" style="color:'+foodTxt+'">Food</h6>' +
                             '</button>' +
 						'</div>' +
 						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+freeBtn+'" id="select-free" onclick="updateFree()">' +
+                            		'<img id="category-icons" src="designAssets/Free_Icon_'+categoryIconColors[5]+'.svg">' +
                                     '<h6 id="text-free" style="color:'+freeTxt+'">Free</h6>' +
                             '</button>' +
 						'</div>' +
 						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+musicBtn+'" id="select-music" onclick="updateMusic()">' +
+                            		'<img id="category-icons" src="designAssets/Music_Icon_'+categoryIconColors[6]+'.svg">' +
                                     '<h6 id="text-music" style="color:'+musicTxt+'">Music</h6>' +
                             '</button>' +
 						'</div>' +
@@ -881,6 +866,7 @@
 				'</div>' +
 			'</div><br>';
 		}
+		//If all event types clicked, become "All"
 		function isUpdateAll() {
 			if (selectActive && selectArts && selectFamily && selectFood && selectFree && selectMusic) {
 				var selectBox = document.getElementById('select-all');
@@ -900,12 +886,12 @@
 				categoryColors[5] = 'white';
 				categoryColors[6] = 'white';
 				categoryTextColors[0] = 'white';
-				categoryTextColors[1] = 'black';
-				categoryTextColors[2] = 'black';
-				categoryTextColors[3] = 'black';
-				categoryTextColors[4] = 'black';
-				categoryTextColors[5] = 'black';
-				categoryTextColors[6] = 'black';
+				categoryTextColors[1] = '#6CC3D5';
+				categoryTextColors[2] = '#6CC3D5';
+				categoryTextColors[3] = '#6CC3D5';
+				categoryTextColors[4] = '#6CC3D5';
+				categoryTextColors[5] = '#6CC3D5';
+				categoryTextColors[6] = '#6CC3D5';
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-active').style.backgroundColor = "white";
 				document.getElementById('select-arts').style.backgroundColor = "white";
@@ -920,6 +906,49 @@
 				document.getElementById('text-free').style.color = "black";
 				document.getElementById('text-food').style.color = "black";
 				document.getElementById('text-music').style.color = "black";
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_Blue.svg', 'All_Icon_White.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Active_Icon_White.svg', 'Active_Icon_Blue.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Arts_Icon_White.svg', 'Arts_Icon_Blue.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Family_Icon_White.svg', 'Family_Icon_Blue.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Food_Icon_White.svg', 'Food_Icon_Blue.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Free_Icon_White.svg', 'Free_Icon_Blue.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Music_Icon_White.svg', 'Music_Icon_Blue.svg');
+			}
+			//Change category icons when selected
+			if (categoryTextColors[0] == "#6CC3D5") {
+				categoryIconColors[0] = "Blue";
+			} else if (categoryTextColors[0] == "white") {
+				categoryIconColors[0] = "White";
+			}
+			if (categoryTextColors[1] == "#6CC3D5") {
+				categoryIconColors[1] = "Blue";
+			} else if (categoryTextColors[1] == "white") {
+				categoryIconColors[1] = "White";
+			}
+			if (categoryTextColors[2] == "#6CC3D5") {
+				categoryIconColors[2] = "Blue";
+			} else if (categoryTextColors[2] == "white") {
+				categoryIconColors[2] = "White";
+			}
+			if (categoryTextColors[3] == "#6CC3D5") {
+				categoryIconColors[3] = "Blue";
+			} else if (categoryTextColors[3] == "white") {
+				categoryIconColors[3] = "White";
+			}
+			if (categoryTextColors[4] == "#6CC3D5") {
+				categoryIconColors[4] = "Blue";
+			} else if (categoryTextColors[4] == "white") {
+				categoryIconColors[4] = "White";
+			}
+			if (categoryTextColors[5] == "#6CC3D5") {
+				categoryIconColors[5] = "Blue";
+			} else if (categoryTextColors[5] == "white") {
+				categoryIconColors[5] = "White";
+			}
+			if (categoryTextColors[6] == "#6CC3D5") {
+				categoryIconColors[6] = "Blue";
+			} else if (categoryTextColors[6] == "white") {
+				categoryIconColors[6] = "White";
 			}
 			clearMarkers();
 			updateFilter();
@@ -945,10 +974,11 @@
 				//Toggle off only if other categories are active
 				if (selectArts || selectFamily || selectFood || selectFree || selectMusic) {
 					categoryColors[1] = 'white';
-					categoryTextColors[1] = 'black';
+					categoryTextColors[1] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
 					text.style.color = "black";
 					selectActive = false;
+					settingsModal.innerHTML = settingsModal.innerHTML.replace('Active_Icon_White.svg', 'Active_Icon_Blue.svg');
 				} else { 
 					selectActive = true; 
 				}
@@ -957,13 +987,15 @@
 				selectAll = false;
 				categoryColors[0] = 'white';
 				categoryColors[1] = '#6CC3D5';
-				categoryTextColors[0] = 'black';
+				categoryTextColors[0] = '#6CC3D5';
 				categoryTextColors[1] = 'white';
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
 				document.getElementById('text-all').style.color = "black";
 				selectActive = true;
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Active_Icon_Blue.svg', 'Active_Icon_White.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
 			}
 			isUpdateAll();
 		}
@@ -974,10 +1006,11 @@
 				//Toggle off only if other categories are active
 				if (selectActive || selectFamily || selectFood || selectFree || selectMusic) {
 					categoryColors[2] = 'white';
-					categoryTextColors[2] = 'black';
+					categoryTextColors[2] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
 					text.style.color = "black";
 					selectArts = false;
+					settingsModal.innerHTML = settingsModal.innerHTML.replace('Arts_Icon_White.svg', 'Arts_Icon_Blue.svg');
 				} else { 
 					selectArts = true; 
 				}
@@ -986,13 +1019,15 @@
 				selectAll = false;
 				categoryColors[0] = 'white';
 				categoryColors[2] = '#6CC3D5';
-				categoryTextColors[0] = 'black';
+				categoryTextColors[0] = '#6CC3D5';
 				categoryTextColors[2] = 'white';
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
 				document.getElementById('text-all').style.color = "black";
 				selectArts = true;
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Arts_Icon_Blue.svg', 'Arts_Icon_White.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
 			}
 			isUpdateAll();
 		}
@@ -1003,10 +1038,11 @@
 				//Toggle off only if other categories are active
 				if (selectActive || selectArts || selectFood || selectFree || selectMusic) {
 					categoryColors[3] = 'white';
-					categoryTextColors[3] = 'black';
+					categoryTextColors[3] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
 					text.style.color = "black";
 					selectFamily = false;
+					settingsModal.innerHTML = settingsModal.innerHTML.replace('Family_Icon_White.svg', 'Family_Icon_Blue.svg');
 				} else { 
 					selectFamily = true; 
 				}
@@ -1015,13 +1051,15 @@
 				selectAll = false;
 				categoryColors[0] = 'white';
 				categoryColors[3] = '#6CC3D5';
-				categoryTextColors[0] = 'black';
+				categoryTextColors[0] = '#6CC3D5';
 				categoryTextColors[3] = 'white';
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
 				document.getElementById('text-all').style.color = "black";
 				selectFamily = true;
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Family_Icon_Blue.svg', 'Family_Icon_White.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
 			}
 			isUpdateAll();
 		}
@@ -1032,10 +1070,11 @@
 				//Toggle off only if other categories are active
 				if (selectActive || selectArts || selectFamily || selectFree || selectMusic) {
 					categoryColors[4] = 'white';
-					categoryTextColors[4] = 'black';
+					categoryTextColors[4] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
 					text.style.color = "black";
 					selectFood = false;
+					settingsModal.innerHTML = settingsModal.innerHTML.replace('Food_Icon_White.svg', 'Food_Icon_Blue.svg');
 				} else { 
 					selectFood = true; 
 				}
@@ -1044,13 +1083,15 @@
 				selectAll = false;
 				categoryColors[0] = 'white';
 				categoryColors[4] = '#6CC3D5';
-				categoryTextColors[0] = 'black';
+				categoryTextColors[0] = '#6CC3D5';
 				categoryTextColors[4] = 'white';
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
 				document.getElementById('text-all').style.color = "black";
 				selectFood = true;
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Food_Icon_Blue.svg', 'Food_Icon_White.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
 			}
 			isUpdateAll();
 		}
@@ -1061,10 +1102,11 @@
 				//Toggle off only if other categories are active
 				if (selectActive || selectArts || selectFamily || selectFood || selectMusic) {
 					categoryColors[5] = 'white';
-					categoryTextColors[5] = 'black';
+					categoryTextColors[5] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
 					text.style.color = "black";
 					selectFree = false;
+					settingsModal.innerHTML = settingsModal.innerHTML.replace('Free_Icon_White.svg', 'Free_Icon_Blue.svg');
 				} else { 
 					selectFree = true; 
 				}
@@ -1073,13 +1115,15 @@
 				selectAll = false;
 				categoryColors[0] = 'white';
 				categoryColors[5] = '#6CC3D5';
-				categoryTextColors[0] = 'black';
+				categoryTextColors[0] = '#6CC3D5';
 				categoryTextColors[5] = 'white';
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
 				document.getElementById('text-all').style.color = "black";
 				selectFree = true;
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Free_Icon_Blue.svg', 'Free_Icon_White.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
 			}
 			isUpdateAll();
 		}
@@ -1090,10 +1134,11 @@
 				//Toggle off only if other categories are active
 				if (selectActive || selectArts || selectFamily || selectFood || selectFree) {
 					categoryColors[6] = 'white';
-					categoryTextColors[6] = 'black';
+					categoryTextColors[6] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
 					text.style.color = "black";
 					selectMusic = false;
+					settingsModal.innerHTML = settingsModal.innerHTML.replace('Music_Icon_White.svg', 'Music_Icon_Blue.svg');
 				} else { 
 					selectMusic = true; 
 				}
@@ -1102,13 +1147,15 @@
 				selectAll = false;
 				categoryColors[0] = 'white';
 				categoryColors[6] = '#6CC3D5';
-				categoryTextColors[0] = 'black';
+				categoryTextColors[0] = '#6CC3D5';
 				categoryTextColors[6] = 'white';
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
 				document.getElementById('text-all').style.color = "black";
 				selectMusic = true;
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('Music_Icon_Blue.svg', 'Music_Icon_White.svg');
+				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
 			}
 			isUpdateAll();
 		}
