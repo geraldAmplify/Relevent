@@ -220,7 +220,7 @@
 			initOnboarding();
 			//Location search bar
 			$('#search-location').click(function() {
-				switchSettingsModals();
+				closeSettingsModals();
 				setTimeout(function () {
 			        let viewheight = parseInt($(window).height(), 10);
 			        let viewwidth = parseInt($(window).width(), 10);
@@ -260,7 +260,7 @@
 		    });
 			//Walk time settings
 		    $('#walk-time').click(function() {
-		    	settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" step="5" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><p style="font-size: 15px">Find events within a certain walking distance from your location!</p><p style="font-size: 11px">Note: An address or your location is required to use this feature.</p><button id="done-button" class="btn btn-info btn-block" onclick="switchSettingsModals()">Done!</button><br></div>';
+		    	settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" step="5" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><p style="font-size: 15px">Find events within a certain walking distance from your location!</p><p style="font-size: 11px">Note: An address or your location is required to use this feature.</p><button id="done-button" class="btn btn-info btn-block" onclick="closeSettingsModals()">Done!</button><br></div>';
 		    	//Walk time slider
 				var slider = document.getElementById("walkRangeSlider");
 				var output = document.getElementById("newWalkTime");
@@ -420,7 +420,7 @@
 		    		//Close warning modal
 		    		$('#warning-modal').hide();
 		    		//Get user location
-		    		navigator.geolocation.watchPosition(function(position) {
+		    		navigator.geolocation.getCurrentPosition(function(position) {
 		          		new_lat = position.coords.latitude;
 		          		new_lng = position.coords.longitude;
 		            	pos = {
@@ -428,7 +428,7 @@
 		              		lng: new_lng
 		            	};
 		            	//Move location marker when user moves (further than 20m away)
-		            	if (((new_lat >= cur_lat+0.00031) || (new_lat <= cur_lat-0.00031) || (new_lng >= cur_lng+0.00031) || (new_lng <= cur_lng-0.00031)) || (cur_lat == undefined && cur_lng == undefined)) {
+		            	if (((new_lat >= cur_lat+0.00032) || (new_lat <= cur_lat-0.00032) || (new_lng >= cur_lng+0.00032) || (new_lng <= cur_lng-0.00032)) || (cur_lat == undefined && cur_lng == undefined)) {
 		            		if (curPosCnt > 0) {
 			            		curPos[curPosCnt-1].setMap(null);
 			            	}
@@ -546,7 +546,7 @@
 
 
 		//Close settings modal
-		function switchSettingsModals() {
+		function closeSettingsModals() {
 			if(settingsModal.style.display = "block") {
 				settingsModal.style.display = "none";
 			}
@@ -595,7 +595,7 @@
 						modalDirections.innerHTML = '<button class="btn btn-secondary btn-block" onclick="getDirections(\'' + curLocation + '\',\'' + properties.content[1] + '\')">View Walking Path</button>';
 					}
 					modalDesc.innerHTML = properties.content[3];
-					switchSettingsModals();
+					closeSettingsModals();
 					modal.style.display = "block";
 					
 				});
@@ -650,13 +650,13 @@
   			//Need a location to proceed
   			if (curLocation == undefined) {
   				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>Wait! Where are you?</h3><br><p>To find the nearest event, you can use your current location or enter an address that's of interest to you.</p><br><br><button class='btn btn-info btn-block' onclick='getUserLocation()' id='use-my-location'>Use my location!</button>";
-  				switchSettingsModals();
+  				closeSettingsModals();
   				$('#warning-modal').toggle();
   			}
   			//Location is entered, proceed to getting closest event
   			else {
   				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>We're here to help!</h3><br><p>We've found your nearest event. Take a look and if you're interested, hit 'Get Directions' and head on over!</p><br><br><button class='btn btn-info btn-block' onclick='getClosestEvent()' id='check-it-out'>Let's Check it Out!</button>";
-  				switchSettingsModals();
+  				closeSettingsModals();
   				$('#warning-modal').toggle();
   			}
   		}
@@ -877,7 +877,7 @@
                             '</button>' +
 						'</div>' +
 					'</div>' +
-					'<br><button id="done-button" class="btn btn-info btn-block" onclick="switchSettingsModals()">Done!</button>' +
+					'<br><button id="done-button" class="btn btn-info btn-block" onclick="closeSettingsModals()">Done!</button>' +
 				'</div>' +
 			'</div><br>';
 		}
