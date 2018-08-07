@@ -22,6 +22,40 @@
 	<!--js functions
 	<script src="js/releventApp.js" type="text/javascript"></script>
 	-->
+	<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:916132,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+	</script>
+		<!-- Google Tag Manager -->
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-T32J3ZW');</script>
+	<!-- End Google Tag Manager -->
+		<!-- Facebook Pixel Code -->
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '2264863760198190');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=2264863760198190&ev=PageView&noscript=1"
+	/></noscript>
+	<!-- End Facebook Pixel Code -->
 </head>
 
 <body>
@@ -44,10 +78,10 @@
 
 
 	  	<div class="btn" id="settings">
-			<button class="btn btn-info" id="filters">Filters &nbsp;<img src="designAssets/Polygon.png" height="6" width="9"></button>
-			<button class="btn btn-info" id="ages">Ages &nbsp;<img src="designAssets/Polygon.png" height="6" width="9"></button>
-			<button class="btn btn-info" id="walk-time">Walk Time &nbsp;<img src="designAssets/Polygon.png" height="6" width="9"></button>
-			<button class="btn btn-info" id="features">Features &nbsp;<img src="designAssets/Polygon.png" height="6" width="9"></button>
+			<button class="btn btn-info" id="categories">Event Type &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
+			<button class="btn btn-info" id="ages">Ages &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
+			<button class="btn btn-info" id="walk-time">Walk Time &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
+			<button class="btn btn-info" id="features">More &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
 	 	</div>
 	  	
 	</div>
@@ -117,10 +151,10 @@
 	  	<div class="modal-content">
 
 	    	<div class="modal-header">
-	    		<h2 id="modal-title" style="margin-bottom: 0"></h2>
+	    		<h2 id="modal-title"></h2>
 	      		<span class="close" id="modal-close" onclick="hideModals();setZoom();">&times;</span>
 	    	</div>
-	    	<img id="moreInfoArrow" src="designAssets/Polygon.png" height="12" width="20">
+	    	<img id="moreInfoArrow" src="designAssets/DownArrowGray.png">
 	    	<div class="modal-body">
 	    		<h5 id="modal-address"></h5>
 	    		<h6 id="modal-walkTime"></h6>
@@ -191,11 +225,17 @@
 			    }, 300);
 			});
 			//Filter settings
-			$('#filters').click(function() {
+			$('#categories').click(function() {
 				switchSettingsModals();
 				settingsModal.innerHTML = initCategories(categoryColors[0],categoryTextColors[0],categoryColors[1],categoryTextColors[1],categoryColors[2],categoryTextColors[2],categoryColors[3],categoryTextColors[3],categoryColors[4],categoryTextColors[4],categoryColors[5],categoryTextColors[5],categoryColors[6],categoryTextColors[6]);
 				$('#settings-modal').toggle();
 			});
+			//Ages settings
+		    $('#ages').click(function() {
+		    	switchSettingsModals();
+		    	settingsModal.innerHTML = '<hr><div><h4>Feature Coming Soon!</h4><br></div>';
+		    	$('#settings-modal').toggle();
+		    });
 			//Walk time settings
 		    $('#walk-time').click(function() {
 		    	switchSettingsModals();
@@ -204,21 +244,27 @@
 				var slider = document.getElementById("walkRangeSlider");
 				var output = document.getElementById("newWalkTime");
 				output.innerHTML = slider.value;
-				slider.oninput = function() {
-					output.innerHTML = this.value;
-					walkTimeLimit = this.value;
-					setZoom();
-					if (cur_lat != undefined && cur_lng != undefined) {
-						clearMarkers();
-						updateFilter();
+				if (curLocation != undefined) {
+					slider.disabled = false;
+					slider.oninput = function() {
+						output.innerHTML = this.value;
+						walkTimeLimit = this.value;
+						setZoom();
+						if (cur_lat != undefined && cur_lng != undefined) {
+							clearMarkers();
+							updateFilter();
+						}
 					}
+				} else {
+					slider.disabled = true;
 				}
+				
 				$('#settings-modal').toggle();
 		    });
 		    //Additional features settings
 		    $('#features').click(function() {
 		    	switchSettingsModals();
-		    	settingsModal.innerHTML = '<hr><div><button id="help-me-button" class="btn btn-info btn-block" onclick="getClosestEventControl()">The kids are crazy. Help me!</button><button id="placeholder-button" class="btn btn-info btn-block disabled">More features on the way!</button><br></div>';
+		    	settingsModal.innerHTML = '<hr><div><button id="help-me-button" class="btn btn-info btn-block" onclick="getClosestEventControl()">The kids are crazy. Help me!</button><br></div>';
 		    	$('#settings-modal').toggle();
 		    });
 		    //Close infocards
@@ -395,6 +441,7 @@
 			var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-location'), {types: ['geocode']});
 		}
 
+		//Carousel slides for onboarding
 		var slideIndex = 1;
 		showSlides(slideIndex);
 
@@ -420,6 +467,7 @@
 		  	dots[slideIndex-1].className += " active";
 		}
 
+		//Check for onboarding cookie
 		function initOnboarding() {
 			var myCookie = getCookie("name"); //get cookie if it exists
 		 	if (myCookie == null) { //no cookie exists yet, create one if requested
@@ -504,7 +552,7 @@
 						modalWalkTime.innerHTML = "Walk Time: " + properties.content[2] + " mins";
 					}
 					if (curLocation != undefined) {
-						modalDirections.innerHTML = '<button class="btn btn-secondary btn-block" onclick="getDirections(\'' + curLocation + '\',\'' + properties.content[1] + '\')">Get Walking Directions</button>';
+						modalDirections.innerHTML = '<button class="btn btn-secondary btn-block" onclick="getDirections(\'' + curLocation + '\',\'' + properties.content[1] + '\')">View Walking Path</button>';
 					}
 					modalDesc.innerHTML = properties.content[3];
 					switchSettingsModals();
@@ -591,9 +639,9 @@
 			e.preventDefault();
 
 			var geocoder = new google.maps.Geocoder();
-			var address = document.getElementById('search-location').value;
+			curLocation = document.getElementById('search-location').value;
 
-			geocoder.geocode( { 'address': address}, function(results, status) {
+			geocoder.geocode( { 'address': curLocation}, function(results, status) {
 
 				if (status == google.maps.GeocoderStatus.OK) {
 				    var new_lat = results[0].geometry.location.lat();
@@ -753,43 +801,37 @@
 			return '<div class="container-fluid">' +
 				'<div class="items-collection"><hr>' +
 					'<div class="row">' +
-						'<div class="items col-6">' +
+						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+allBtn+'" id="select-all" onclick="updateAll()">' +
                                     '<h6 id="text-all" style="color:'+allTxt+'">All</h6>' +
                             '</button>' +
 						'</div>' +
-						'<div class="items col-6">' +
+						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+activeBtn+'" id="select-active" onclick="updateActive()">' +
                                     '<h6 id="text-active" style="color:'+activeTxt+'">Active</h6>' +
                             '</button>' +
 						'</div>' +
-					'</div>' +
-					'<div class="row">' +
-						'<div class="items col-6">' +
+						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+artsBtn+'" id="select-arts" onclick="updateArts()">' +
                                     '<h6 id="text-arts" style="color:'+artsTxt+'">Arts</h6>' +
                             '</button>' +
 						'</div>' +
-						'<div class="items col-6">' +
+						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+familyBtn+'" id="select-family" onclick="updateFamily()">' +
                                     '<h6 id="text-family" style="color:'+familyTxt+'">Family</h6>' +
                             '</button>' +
 						'</div>' +
-					'</div>' +
-					'<div class="row">' +
-						'<div class="items col-6">' +
+						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+foodBtn+'" id="select-food" onclick="updateFood()">' +
                                     '<h6 id="text-food" style="color:'+foodTxt+'">Food</h6>' +
                             '</button>' +
 						'</div>' +
-						'<div class="items col-6">' +
+						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+freeBtn+'" id="select-free" onclick="updateFree()">' +
                                     '<h6 id="text-free" style="color:'+freeTxt+'">Free</h6>' +
                             '</button>' +
 						'</div>' +
-					'</div>' +
-					'<div class="row">' +
-						'<div class="items col-6">' +
+						'<div class="items col-6 col-md-3">' +
                             '<button class="btn btn-block" style="background-color:'+musicBtn+'" id="select-music" onclick="updateMusic()">' +
                                     '<h6 id="text-music" style="color:'+musicTxt+'">Music</h6>' +
                             '</button>' +
