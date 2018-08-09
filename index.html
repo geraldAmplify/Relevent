@@ -72,7 +72,7 @@
 	      		</form>
     		</div>
     		<div class="col-2" id="weatherCol">
-    			<button id="weather" class="btn btn-warning">23C</button>
+    			<button id="weather-btn" class="btn btn-warning"><img id="weather-icon" src="designAssets/weather-temp.png"></button>
     		</div>
   		</div>
 
@@ -122,7 +122,7 @@
 					<div style="display: flex">
 			  			<img id="onboarding-img" src="designAssets/Illustration_Activity_Elephant.svg" style="width:100%">
 			  		</div>
-			  		<button class='btn btn-secondary btn-block' id="get-started" onclick='makeCookie()'>Find Events</button>
+			  		<button class='btn btn-secondary btn-block' id="get-started" onclick='makeCookie();getUserLocation();'>Find Events</button>
 				</div>
 				
 
@@ -139,6 +139,9 @@
 			</div>
 		</div>
 	</div>
+	<!-- Warning For Location Modal -->
+	<div id="weather-modal"></div>
+
 	<!-- Settings Modal -->
 	<div id="settings-modal"></div>
 
@@ -154,7 +157,8 @@
 	    		<h2 id="modal-title"></h2>
 	      		<span class="close" id="modal-close" onclick="hideModals();setZoom();">&times;</span>
 	    	</div>
-	    	<img id="moreInfoArrow" src="designAssets/DownArrowGray.png">
+	    	<h5 id="scroll-notice">Scroll for more info</h5>
+	    	<br>
 	    	<div class="modal-body">
 	    		<h5 id="modal-address"></h5>
 	    		<h6 id="modal-walkTime"></h6>
@@ -205,8 +209,10 @@
 		var categoryTextColors = ['white','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5'];
 		var categoryIconColors = ["White", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"];
 
-		//Get the modal for walkTime
+		//Get the modals for settings and warnings
+		var weatherModal = document.getElementById('weather-modal');
 		var settingsModal = document.getElementById('settings-modal');
+		var warningModal = document.getElementById('warning-modal');
 		settingsModal.style.display = "none";
 		//Get the modal for infocards
 		var modal = document.getElementById('events-modal');
@@ -221,7 +227,7 @@
 			initOnboarding();
 			//Location search bar
 			$('#search-location').click(function() {
-				closeSettingsModals();
+				hideModals();
 				isCategories = false;
 				isAges = false;
 				isWalkTime = false;
@@ -233,9 +239,22 @@
 			        viewport.setAttribute("content", "height=" + viewheight + "px, width=" + viewwidth + "px, initial-scale=1.0");
 			    }, 300);
 			});
+			$('#weather-btn').click(function() {
+				$('#settings-modal').hide();
+				$('#warning-modal').hide();
+				isCategories = false;
+				isAges = false;
+				isWalkTime = false;
+				isFeatures = false;
+  				weatherModal.innerHTML = "<h3 style='text-align: center'>Sun's Out!</h3><div style='display: flex'><img id='weather-img-modal' src='designAssets/Illustration_Hot_Elephant.svg' style='width:100%'></div><button id='weather-check' class='btn btn-info btn-block' onclick='hideModals()'>Applied sunscreen</button>";
+  				$('#weather-modal').toggle();
+			});
 			//Filter settings
 			$('#categories').click(function() {
 				settingsModal.innerHTML = initCategories(categoryColors[0],categoryTextColors[0],categoryColors[1],categoryTextColors[1],categoryColors[2],categoryTextColors[2],categoryColors[3],categoryTextColors[3],categoryColors[4],categoryTextColors[4],categoryColors[5],categoryTextColors[5],categoryColors[6],categoryTextColors[6]);
+				//UX when closing settings taps
+				$('#weather-modal').hide();
+		    	$('#warning-modal').hide();
 				if (isCategories == true) {
 					isCategories = false;
 					$('#settings-modal').hide();
@@ -251,6 +270,9 @@
 			//Ages settings
 		    $('#ages').click(function() {
 		    	settingsModal.innerHTML = '<hr><div><h4>Feature Coming Soon!</h4><br></div>';
+		    	//UX when closing settings taps
+		    	$('#weather-modal').hide();
+		    	$('#warning-modal').hide();
 		    	if (isAges == true) {
 					isAges = false;
 					$('#settings-modal').hide();
@@ -265,13 +287,14 @@
 		    });
 			//Walk time settings
 		    $('#walk-time').click(function() {
-		    	settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" step="5" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><p style="font-size: 15px">Find events within a certain walking distance from your location!</p><p style="font-size: 11px">Note: An address or your location is required to use this feature.</p><button id="done-button" class="btn btn-info btn-block" onclick="closeSettingsModals()">Done!</button><br></div>';
-		    	//Walk time slider
-				var slider = document.getElementById("walkRangeSlider");
-				var output = document.getElementById("newWalkTime");
-				output.innerHTML = slider.value;
-				if (curLocation != undefined) {
-					slider.disabled = false;
+		    	if (curLocation == undefined) {
+		    		settingsModal.innerHTML = '<hr><div class="locationPrompt"><p>Find events within a certain walking distance from your location</p><button class="btn btn-info btn-block" onclick="getUserLocation()">Use my location!</button><br></div>';
+		    	} else {
+		    		settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><button id="done-button" class="btn btn-info btn-block" onclick="hideModals()">Done!</button><br></div>';
+		    		//Walk time slider
+					var slider = document.getElementById("walkRangeSlider");
+					var output = document.getElementById("newWalkTime");
+					output.innerHTML = slider.value;
 					slider.oninput = function() {
 						output.innerHTML = this.value;
 						walkTimeLimit = this.value;
@@ -281,10 +304,11 @@
 							updateFilter();
 						}
 					}
-				} else {
-					slider.disabled = true;
-				}
-				
+		    	}
+		    	
+				//UX when closing settings taps
+				$('#weather-modal').hide();
+		    	$('#warning-modal').hide();
 				if (isWalkTime == true) {
 					isWalkTime = false;
 					$('#settings-modal').hide();
@@ -300,9 +324,12 @@
 		    //Additional features settings
 		    $('#features').click(function() {
 		    	settingsModal.innerHTML = '<hr><div><button id="help-me-button" class="btn btn-info btn-block" onclick="getClosestEventControl()">The kids are crazy. Help me!</button><br></div>';
+		    	//UX when closing settings taps
+		    	$('#weather-modal').hide();
+		    	$('#warning-modal').hide();
 		    	if (isFeatures == true) {
 		    		isFeatures = false;
-					$('#settings-modal').hide();
+		    		$('#settings-modal').hide();
 				} else {
 					isCategories = false;
 					isAges = false;
@@ -319,8 +346,7 @@
 		    	isAges = false;
 				isWalkTime = false;
 				isFeatures = false;
-		    	$('#events-modal').hide();
-				
+		    	hideModals();
 		    });
 		});
 
@@ -438,8 +464,8 @@
 	    function getUserLocation() {
 		    if (navigator.geolocation) {
 		    	if (isUserLocation == false) {
-		    		//Close warning modal
-		    		$('#warning-modal').hide();
+		    		//Close all modals
+		    		hideModals();
 		    		//Get user location
 		    		navigator.geolocation.getCurrentPosition(function(position) {
 		          		new_lat = position.coords.latitude;
@@ -564,14 +590,6 @@
 		 	}
 		 	return decodeURI(dc.substring(begin + prefix.length, end));
 		}
-
-
-		//Close settings modal
-		function closeSettingsModals() {
-			if(settingsModal.style.display = "block") {
-				settingsModal.style.display = "none";
-			}
-		}
 		
 	    //Add current position marker
 		function addMarkerCurPos(properties) {
@@ -616,7 +634,7 @@
 						modalDirections.innerHTML = '<button class="btn btn-secondary btn-block" onclick="getDirections(\'' + curLocation + '\',\'' + properties.content[1] + '\')">View Walking Path</button>';
 					}
 					modalDesc.innerHTML = properties.content[3];
-					closeSettingsModals();
+					hideModals();
 					modal.style.display = "block";
 					
 				});
@@ -670,18 +688,17 @@
   		//"Help me" feature functions
   		function getClosestEventControl() {
   			directionsNow = true;
-  			var warningModal = document.getElementById('warning-modal');
   			//Need a location to proceed
   			if (curLocation == undefined) {
   				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>Wait! Where are you?</h3><br><p>To find the nearest event, you can use your current location or enter an address that's of interest to you.</p><br><br><button class='btn btn-info btn-block' onclick='getUserLocation()' id='use-my-location'>Use my location!</button>";
-  				closeSettingsModals();
-  				$('#warning-modal').toggle();
+  				hideModals();
+  				$('#warning-modal').show();
   			}
   			//Location is entered, proceed to getting closest event
   			else {
   				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>We're here to help!</h3><br><p>We've found your nearest event. Take a look and if you're interested, hit 'Get Directions' and head on over!</p><br><br><button class='btn btn-info btn-block' onclick='getClosestEvent()' id='check-it-out'>Let's Check it Out!</button>";
-  				closeSettingsModals();
-  				$('#warning-modal').toggle();
+  				hideModals();
+  				$('#warning-modal').show();
   			}
   		}
   		function getClosestEvent() {
@@ -692,6 +709,12 @@
   		}
   		//Close the onboarding and warning modals
   		function hideModals() {
+  			isCategories = false;
+			isAges = false;
+			isWalkTime = false;
+			isFeatures = false;
+  			$('#weather-modal').hide();
+  			$('#settings-modal').hide();
   			$('#warning-modal').hide();
   			$('#onboarding-layer').hide();
   			$('#onboarding-modal').hide();
@@ -745,9 +768,9 @@
 
 		//Set map zoom based on walk time setting
 		function setZoom() {
-			if (walkTimeLimit == 30) {
+			if (walkTimeLimit > 25 && walkTimeLimit <= 30) {
 				map.setZoom(13);
-			} else if (walkTimeLimit == 20) {
+			} else if (walkTimeLimit > 15 && walkTimeLimit <= 25) {
 				map.setZoom(14);
 			} else {
 				map.setZoom(15);
@@ -862,7 +885,7 @@
                             '</button>' +
 						'</div>' +
 					'</div>' +
-					'<br><button id="done-button" class="btn btn-info btn-block" onclick="closeSettingsModals()">Done!</button>' +
+					'<br><button id="done-button" class="btn btn-info btn-block" onclick="hideModals()">Done!</button>' +
 				'</div>' +
 			'</div><br>';
 		}
@@ -900,12 +923,12 @@
 				document.getElementById('select-free').style.backgroundColor = "white";
 				document.getElementById('select-music').style.backgroundColor = "white";
 				text.style.color = "white";
-				document.getElementById('text-active').style.color = "black";
-				document.getElementById('text-arts').style.color = "black";
-				document.getElementById('text-family').style.color = "black";
-				document.getElementById('text-free').style.color = "black";
-				document.getElementById('text-food').style.color = "black";
-				document.getElementById('text-music').style.color = "black";
+				document.getElementById('text-active').style.color = "#6CC3D5";
+				document.getElementById('text-arts').style.color = "#6CC3D5";
+				document.getElementById('text-family').style.color = "#6CC3D5";
+				document.getElementById('text-free').style.color = "#6CC3D5";
+				document.getElementById('text-food').style.color = "#6CC3D5";
+				document.getElementById('text-music').style.color = "#6CC3D5";
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_Blue.svg', 'All_Icon_White.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Active_Icon_White.svg', 'Active_Icon_Blue.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Arts_Icon_White.svg', 'Arts_Icon_Blue.svg');
@@ -976,7 +999,7 @@
 					categoryColors[1] = 'white';
 					categoryTextColors[1] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
-					text.style.color = "black";
+					text.style.color = "#6CC3D5";
 					selectActive = false;
 					settingsModal.innerHTML = settingsModal.innerHTML.replace('Active_Icon_White.svg', 'Active_Icon_Blue.svg');
 				} else { 
@@ -992,7 +1015,7 @@
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
-				document.getElementById('text-all').style.color = "black";
+				document.getElementById('text-all').style.color = "#6CC3D5";
 				selectActive = true;
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Active_Icon_Blue.svg', 'Active_Icon_White.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
@@ -1008,7 +1031,7 @@
 					categoryColors[2] = 'white';
 					categoryTextColors[2] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
-					text.style.color = "black";
+					text.style.color = "#6CC3D5";
 					selectArts = false;
 					settingsModal.innerHTML = settingsModal.innerHTML.replace('Arts_Icon_White.svg', 'Arts_Icon_Blue.svg');
 				} else { 
@@ -1024,7 +1047,7 @@
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
-				document.getElementById('text-all').style.color = "black";
+				document.getElementById('text-all').style.color = "#6CC3D5";
 				selectArts = true;
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Arts_Icon_Blue.svg', 'Arts_Icon_White.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
@@ -1040,7 +1063,7 @@
 					categoryColors[3] = 'white';
 					categoryTextColors[3] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
-					text.style.color = "black";
+					text.style.color = "#6CC3D5";
 					selectFamily = false;
 					settingsModal.innerHTML = settingsModal.innerHTML.replace('Family_Icon_White.svg', 'Family_Icon_Blue.svg');
 				} else { 
@@ -1056,7 +1079,7 @@
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
-				document.getElementById('text-all').style.color = "black";
+				document.getElementById('text-all').style.color = "#6CC3D5";
 				selectFamily = true;
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Family_Icon_Blue.svg', 'Family_Icon_White.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
@@ -1072,7 +1095,7 @@
 					categoryColors[4] = 'white';
 					categoryTextColors[4] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
-					text.style.color = "black";
+					text.style.color = "#6CC3D5";
 					selectFood = false;
 					settingsModal.innerHTML = settingsModal.innerHTML.replace('Food_Icon_White.svg', 'Food_Icon_Blue.svg');
 				} else { 
@@ -1088,7 +1111,7 @@
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
-				document.getElementById('text-all').style.color = "black";
+				document.getElementById('text-all').style.color = "#6CC3D5";
 				selectFood = true;
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Food_Icon_Blue.svg', 'Food_Icon_White.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
@@ -1104,7 +1127,7 @@
 					categoryColors[5] = 'white';
 					categoryTextColors[5] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
-					text.style.color = "black";
+					text.style.color = "#6CC3D5";
 					selectFree = false;
 					settingsModal.innerHTML = settingsModal.innerHTML.replace('Free_Icon_White.svg', 'Free_Icon_Blue.svg');
 				} else { 
@@ -1120,7 +1143,7 @@
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
-				document.getElementById('text-all').style.color = "black";
+				document.getElementById('text-all').style.color = "#6CC3D5";
 				selectFree = true;
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Free_Icon_Blue.svg', 'Free_Icon_White.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
@@ -1136,7 +1159,7 @@
 					categoryColors[6] = 'white';
 					categoryTextColors[6] = '#6CC3D5';
 					selectBox.style.backgroundColor = "white";
-					text.style.color = "black";
+					text.style.color = "#6CC3D5";
 					selectMusic = false;
 					settingsModal.innerHTML = settingsModal.innerHTML.replace('Music_Icon_White.svg', 'Music_Icon_Blue.svg');
 				} else { 
@@ -1152,7 +1175,7 @@
 				selectBox.style.backgroundColor = "#6CC3D5";
 				document.getElementById('select-all').style.backgroundColor = "white";
 				text.style.color = "white";
-				document.getElementById('text-all').style.color = "black";
+				document.getElementById('text-all').style.color = "#6CC3D5";
 				selectMusic = true;
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('Music_Icon_Blue.svg', 'Music_Icon_White.svg');
 				settingsModal.innerHTML = settingsModal.innerHTML.replace('All_Icon_White.svg', 'All_Icon_Blue.svg');
