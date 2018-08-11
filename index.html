@@ -487,13 +487,12 @@
 	    function getSearchLocation() {
 	    	//Close all modals
     		hideModals();
-    		$("#search-location").trigger("select");
     		setTimeout(function () {
 		        let viewheight = parseInt($(window).height(), 10);
 		        let viewwidth = parseInt($(window).width(), 10);
 		        let viewport = document.querySelector("meta[name=viewport]");
 		        viewport.setAttribute("content", "height=" + viewheight + "px, width=" + viewwidth + "px, initial-scale=1.0");
-
+			$("#search-location").trigger("select");
 		    }, 300);
 			
 	    }
