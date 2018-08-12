@@ -107,13 +107,50 @@
 			</div>
 		</div>
 	</div>
-	<!-- Warning For Location Modal -->
+	<!-- Category Tip Modal -->
+	<div id="categoryTip-layer">
+		<div id="categoryTip-modal">
+			<br>
+			<div class="categoryTip-container">
+
+				<div class="mySlides fade">
+					<h4 id="categoryTip-title">Find Relevant Activities</h4>
+					<div style="display: flex">
+			  			<img id="categoryTip-img" src="designAssets/Illustration_Activity_Elephant.svg" style="width:100%">
+			  		</div>
+			  		<div id="categoryTip-text">Use filters to find event types that fit your family's lifestyle</div>
+			  		<button class='btn btn-secondary btn-block' id="categoryTip-done" onclick='makeCategoryCookie();'>Got It!</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- WalkTime Tip Modal -->
+	<div id="walkTimeTip-layer">
+		<div id="walkTimeTip-modal">
+			<br>
+			<div class="walkTimeTip-container">
+
+				<div class="mySlides fade">
+					<h4 id="walkTimeTip-title">Location, Location, Location</h4>
+					<div style="display: flex">
+			  			<img id="walkTimeTip-img" src="designAssets/Illustration_Directions_Elephant.svg" style="width:100%">
+			  		</div>
+			  		<div id="walkTimeTip-text">Move the slider to find events a quick walk away</div>
+			  		<button class='btn btn-secondary btn-block' id="walkTimeTip-done" onclick='makeWalkTimeCookie();'>Got It!</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Weather Modal -->
 	<div id="weather-modal"></div>
 
 	<!-- Settings Modal -->
 	<div id="settings-modal"></div>
 
-	<!-- Warning For Location Modal -->
+	<!-- Get Location Modal (Help Me Feature) -->
 	<div id="warning-modal"></div>
 
 	<!-- Infocard Modal -->
@@ -190,7 +227,8 @@
 
 		$(document).ready(function() {
 			//Initialize onboarding modal
-			initOnboarding();
+			$('#onboarding-layer').show();
+	 		$('#onboarding-modal').show();
 			//Location search bar
 			$('#search-location').click(function() {
 				hideModals();
@@ -217,6 +255,7 @@
 			});
 			//Filter settings
 			$('#categories').click(function() {
+				categoryTip();
 				settingsModal.innerHTML = initCategories(categoryColors[0],categoryTextColors[0],categoryColors[1],categoryTextColors[1],categoryColors[2],categoryTextColors[2],categoryColors[3],categoryTextColors[3],categoryColors[4],categoryTextColors[4],categoryColors[5],categoryTextColors[5],categoryColors[6],categoryTextColors[6]);
 				//UX when closing settings taps
 				$('#weather-modal').hide();
@@ -253,6 +292,7 @@
 		    });
 			//Walk time settings
 		    $('#walk-time').click(function() {
+		    	walkTimeTip();
 		    	if (curLocation == undefined) {
 		    		settingsModal.innerHTML = '<hr><div class="locationPrompt"><p>Find events within a certain walking distance from your location</p><button class="btn btn-info btn-block" onclick="getUserLocation()">Use my location!</button><br></div>';
 		    	} else {
@@ -422,8 +462,8 @@
 	      			
 	    }
 
-	    var walkingBuffer = 0.00032;
-		//HTML5 Geolocation.
+		//HTML5 Geolocation (onboarding option #1)
+		var walkingBuffer = 0.00032;
 	    function getUserLocation() {
 		    if (navigator.geolocation) {
 		    	if (isUserLocation == false) {
@@ -484,6 +524,7 @@
 	        	infoWindow.open(map);
 	      	}
 	    }
+	    //Trigger location search (onboarding option #2)
 	    function getSearchLocation() {
 	    	//Close all modals
     		hideModals();
@@ -502,23 +543,39 @@
 			var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-location'), {types: ['geocode']});
 		}
 
-		//Check for onboarding cookie
-		function initOnboarding() {
-			var myCookie = getCookie("name"); //get cookie if it exists
+		//Check for category tip cookie
+		function categoryTip() {
+			var myCookie = getCookie("categoryTip"); //get cookie if it exists
 		 	if (myCookie == null) { //no cookie exists yet, create one if requested
-		 		$('#onboarding-layer').show();
-		 		$('#onboarding-modal').show();
+		 		$('#categoryTip-layer').show();
+		 		$('#categoryTip-modal').show();
 		 	}
 		}
-		//”Do not show me again” button pressed
-	 	function makeCookie() { 
-			//create cookie
-		 	document.cookie = "name=ReleventNow; expires=Fri, 30 Dec 2050 23:59:59 UTC";
-		 	//close the modal dialog
-		 	$('#onboarding-layer').hide();
-		 	$('#onboarding-modal').hide();
+		//Check for wlak time tip cookie
+		function walkTimeTip() {
+			var myCookie = getCookie("walkTimeTip"); //get cookie if it exists
+		 	if (myCookie == null) { //no cookie exists yet, create one if requested
+		 		$('#walkTimeTip-layer').show();
+		 		$('#walkTimeTip-modal').show();
+		 	}
 		}
-		//Checks if cookie exists
+		//Create cookie to not show category tip again
+	 	function makeCategoryCookie() { 
+			//create cookie
+		 	document.cookie = "categoryTip=Relevent_CategoryTip; expires=Fri, 30 Dec 2050 23:59:59 UTC";
+		 	//close the modal dialog
+		 	$('#categoryTip-layer').hide();
+		 	$('#categoryTip-modal').hide();
+		}
+		//Create cookie to not show walk time tip again
+	 	function makeWalkTimeCookie() { 
+			//create cookie
+		 	document.cookie = "walkTimeTip=Relevent_WalkTimeTip; expires=Fri, 30 Dec 2050 23:59:59 UTC";
+		 	//close the modal dialog
+		 	$('#walkTimeTip-layer').hide();
+		 	$('#walkTimeTip-modal').hide();
+		}
+		//Checks if cookies exists
 		function getCookie(name) { 
 		 	var dc = document.cookie;
 		 	var prefix = name +"=";
@@ -666,6 +723,8 @@
   			$('#settings-modal').hide();
   			$('#warning-modal').hide();
   			$('#onboarding-layer').hide();
+  			$('#categoryTip-modal').hide();
+  			$('#categoryTip-layer').hide();
   			$('#onboarding-modal').hide();
   			$('#events-modal').hide();
   		}
