@@ -1,3 +1,4 @@
+/***************** Onboarding modal *****************/
 #onboarding-layer {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -62,7 +63,132 @@
     position: absolute;
     top: 100%;
 }
-/* Fading animation */
+
+/***************** Category Modal *****************/
+#categoryTip-layer {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: scroll; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.2); /* Black w/ opacity */
+}
+#categoryTip-modal {
+    display: none;
+    position: absolute;
+    top: 15%;
+    left: 7.5%;
+    z-index: 2; /* Sit on top */
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    height: 80%;
+    width: 85%;
+    border-radius: 10px;
+    padding: 15px 20px 20px 20px;
+}
+/* CategoryTip container */
+.categoryTip-container {
+    height: 85%;
+    width: 100%;
+    position: relative;
+    margin: auto;
+}
+/* Caption title */
+#categoryTip-title {
+    color: black;
+    padding: 0px 12px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0;
+}
+#categoryTip-img {
+    position: absolute;
+    height: 75%;
+    top: 8%;
+}
+/* Caption text */
+#categoryTip-text {
+    color: black;
+    font-size: 15px;
+    padding: 0px 6px 0px 6px;
+    position: absolute;
+    top: 80%;
+    width: 100%;
+    text-align: center;
+}
+#categoryTip-done {
+    position: absolute;
+    top: 100%;
+}
+
+/***************** Walk Time Modal *****************/
+#walkTimeTip-layer {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: scroll; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.2); /* Black w/ opacity */
+}
+#walkTimeTip-modal {
+    display: none;
+    position: absolute;
+    top: 15%;
+    left: 7.5%;
+    z-index: 2; /* Sit on top */
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    height: 80%;
+    width: 85%;
+    border-radius: 10px;
+    padding: 15px 20px 20px 20px;
+}
+/* WalkTimeTip container */
+.walkTimeTip-container {
+    height: 85%;
+    width: 100%;
+    position: relative;
+    margin: auto;
+}
+/* Caption title */
+#walkTimeTip-title {
+    color: black;
+    padding: 0px 12px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0;
+}
+#walkTimeTip-img {
+    position: absolute;
+    height: 75%;
+    top: 8%;
+}
+/* Caption text */
+#walkTimeTip-text {
+    color: black;
+    font-size: 15px;
+    padding: 0px 6px 0px 6px;
+    position: absolute;
+    top: 80%;
+    width: 100%;
+    text-align: center;
+}
+#walkTimeTip-done {
+    position: absolute;
+    top: 100%;
+}
+
+/***************** Fading animation *****************/
 .fade {
     -webkit-animation-name: fade;
     -webkit-animation-duration: 1.5s;
@@ -82,7 +208,8 @@
 }
 
 
-
+/***************** Header - Top 2 Rows *****************/
+/***************** 1st Row *****************/
 #header {
 	/*background-color: #6CC3D5;*/
 	height: 14%;
@@ -157,6 +284,7 @@
     padding: 20px 15px 20px 15px;
 }
 
+/***************** 2nd Row *****************/
 /*Bottom navigation bar*/
 #settings {
 	height: 45%;
@@ -236,7 +364,7 @@
 }
 
 
-/* Google maps */
+/***************** Google maps *****************/
 #map {
 	height: 86%;
 }
@@ -248,7 +376,7 @@ html, body {
 }
 
 
-/* Walk time slider */
+/***************** Walk time slider *****************/
 .slidecontainer {
     width: 100%;
 }
@@ -284,7 +412,7 @@ html, body {
 }
 
 
-/* The events modal (background) */
+/***************** The events modal (background) *****************/
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -297,6 +425,12 @@ html, body {
     /*background-color: rgb(0,0,0); /* Fallback color */
     /*background-color: rgba(0,0,0,0.1); /* Black w/ opacity */
 }
+@media only screen and (min-width : 667px) {    
+    .modal {
+        padding-top: 45%; /* Location of the box */
+    }
+}
+
 #moreInfoArrow {
     display:block;
     margin: 4% auto 8% auto;
