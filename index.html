@@ -582,18 +582,19 @@
 		 	if (myCookie == null) { //no cookie exists yet, create one if requested
 		 		$('#closestEventTip-layer').show();
 		 		$('#closestEventTip-modal').show();
-		 	} else { //Help me feature functions
-		 		//Need a location to proceed
-	  			if (curLocation == undefined) {
-	  				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>Wait! Where are you?</h3><br><p>You can use your current location or input a direct address to find events in that area</p><br><br><button class='btn btn-info btn-block' onclick='getUserLocation()' id='use-my-location'>Use my location!</button>";
-	  				hideModals();
-	  				$('#warning-modal').show();
-	  			}
-	  			//Location is entered, proceed to getting closest event
-	  			else {
-	  				getClosestEvent();
-	  			}
-		 	}
+		 	} 
+		 	//"Help me" feature functions
+ 			//Need a location to proceed
+  			if (curLocation == undefined && myCookie != null) {
+  				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>Wait! Where are you?</h3><br><p>You can use your current location or input a direct address to find events in that area</p><br><br><button class='btn btn-info btn-block' onclick='getUserLocation()' id='use-my-location'>Use my location!</button>";
+  				hideModals();
+  				$('#warning-modal').show();
+  			}
+  			//Location is entered, proceed to getting closest event
+  			else if (curLocation != undefined && myCookie != null) {
+				getClosestEvent();
+  			}
+		 	
 		}
 		//***** Create cookies *****
 		//Create cookie to not show category tip again
