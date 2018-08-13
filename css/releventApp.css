@@ -420,7 +420,7 @@
     right: 5%;
 }
 @media only screen and (min-width : 667px) {    
-    #get-started-1, #get-started-2, #categoryTip-done, #walkTimeTip-done, #closestEventTip-done, #weather-done, #done-button, #help-me-button, #use-my-location {
+    #get-started-1, #get-started-2, #categoryTip-done, #walkTimeTip-done, #closestEventTip-done {
         width: 80%;
         left: 10%;
     }
