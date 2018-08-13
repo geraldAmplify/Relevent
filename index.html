@@ -309,7 +309,7 @@
 		    $('#walk-time').click(function() {
 		    	walkTimeTip();
 		    	if (curLocation == undefined) {
-		    		settingsModal.innerHTML = '<hr><div class="locationPrompt"><p>Find events within a certain walking distance from your location</p><button class="btn btn-info btn-block" id="use-my-location" onclick="getUserLocation()">Use my location!</button><br></div>';
+		    		settingsModal.innerHTML = '<hr><div class="locationPrompt"><p>Find events within a certain walking distance from your location</p><button class="btn btn-info btn-block" onclick="getUserLocation()">Use my location!</button><br></div>';
 		    	} else {
 		    		settingsModal.innerHTML = '<hr><div class="slidecontainer"><input type="range" min="10" max="30" value="'+walkTimeLimit+'" class="slider" id="walkRangeSlider"><p>Walk Time: <span id="newWalkTime"></span> mins</p><button id="done-button" class="btn btn-info btn-block" onclick="hideModals()">Done!</button><br></div>';
 		    		//Walk time slider
