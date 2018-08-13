@@ -143,6 +143,21 @@
 			</div>
 		</div>
 	</div>
+	<!-- ClosestEvent Tip Modal -->
+	<div id="closestEventTip-layer">
+		<div id="closestEventTip-modal">
+			<br>
+			<div class="closestEventTip-container">
+
+				<div class="mySlides fade">
+					<h4 id="closestEventTip-title">We're here to help!</h4>
+			  		<div id="closestEventTip-text"><p>This feature finds the nearest event to your set location so you can take your kids out to burn off some energy!</p></div>
+			  		<button class='btn btn-secondary btn-block' id="closestEventTip-done" onclick='makeClosestEventCookie();closestEventTip();'>Let's check it out!</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 	<!-- Weather Modal -->
 	<div id="weather-modal"></div>
@@ -329,7 +344,7 @@
 		    });
 		    //Additional features settings
 		    $('#features').click(function() {
-		    	settingsModal.innerHTML = '<hr><div><button id="help-me-button" class="btn btn-info btn-block" onclick="getClosestEventControl()">The kids are crazy. Help me!</button><br></div>';
+		    	settingsModal.innerHTML = '<hr><div><button id="help-me-button" class="btn btn-info btn-block" onclick="closestEventTip()">The kids are crazy. Help me!</button><br></div>';
 		    	//UX when closing settings taps
 		    	$('#weather-modal').hide();
 		    	$('#warning-modal').hide();
@@ -498,7 +513,7 @@
 							      		getClosestEvent();
 							      		directionsNow = false;
 							      	}
-						    }, 2000);
+						    }, 2500);
 						    addMarkerCurPos({
 			            		coords: pos, 
 			            		iconImage: "designAssets/UserPin.png"
@@ -543,6 +558,7 @@
 			var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-location'), {types: ['geocode']});
 		}
 
+		//***** Check for cookies *****
 		//Check for category tip cookie
 		function categoryTip() {
 			var myCookie = getCookie("categoryTip"); //get cookie if it exists
@@ -551,7 +567,7 @@
 		 		$('#categoryTip-modal').show();
 		 	}
 		}
-		//Check for wlak time tip cookie
+		//Check for walk time tip cookie
 		function walkTimeTip() {
 			var myCookie = getCookie("walkTimeTip"); //get cookie if it exists
 		 	if (myCookie == null) { //no cookie exists yet, create one if requested
@@ -559,6 +575,27 @@
 		 		$('#walkTimeTip-modal').show();
 		 	}
 		}
+		//Check for "Help Me" tip cookie
+		function closestEventTip() {
+			directionsNow = true;
+			var myCookie = getCookie("closestEventTip"); //get cookie if it exists
+		 	if (myCookie == null) { //no cookie exists yet, create one if requested
+		 		$('#closestEventTip-layer').show();
+		 		$('#closestEventTip-modal').show();
+		 	} else { //Help me feature functions
+		 		//Need a location to proceed
+	  			if (curLocation == undefined) {
+	  				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>Wait! Where are you?</h3><br><p>You can use your current location or input a direct address to find events in that area</p><br><br><button class='btn btn-info btn-block' onclick='getUserLocation()' id='use-my-location'>Use my location!</button>";
+	  				hideModals();
+	  				$('#warning-modal').show();
+	  			}
+	  			//Location is entered, proceed to getting closest event
+	  			else {
+	  				getClosestEvent();
+	  			}
+		 	}
+		}
+		//***** Create cookies *****
 		//Create cookie to not show category tip again
 	 	function makeCategoryCookie() { 
 			//create cookie
@@ -574,6 +611,14 @@
 		 	//close the modal dialog
 		 	$('#walkTimeTip-layer').hide();
 		 	$('#walkTimeTip-modal').hide();
+		}
+		//Create cookie to not show "Help Me" tip again
+	 	function makeClosestEventCookie() { 
+			//create cookie
+		 	document.cookie = "closestEventTip=Relevent_ClosestEventTip; expires=Fri, 30 Dec 2050 23:59:59 UTC";
+		 	//close the modal dialog
+		 	$('#closestEventTip-layer').hide();
+		 	$('#closestEventTip-modal').hide();
 		}
 		//Checks if cookies exists
 		function getCookie(name) { 
@@ -632,11 +677,12 @@
 					map.panTo({lat: offsetY, lng: properties.coords.lng});
 					modalTitle.innerHTML = properties.content[0]
 					modalAddr.innerHTML = properties.content[1];
+					//Location submitted, can get event walk times
 					if (properties.content[2] != -1) {
 						modalWalkTime.innerHTML = "Walk Time: " + properties.content[2] + " mins";
 					}
 					if (curLocation != undefined) {
-						modalDirections.innerHTML = '<button class="btn btn-secondary btn-block" onclick="getDirections(\'' + curLocation + '\',\'' + properties.content[1] + '\')">View Walking Path</button>';
+						modalDirections.innerHTML = '<button class="btn btn-warning btn-block" onclick="getDirections(\'' + curLocation + '\',\'' + properties.content[1] + '\')">View Walking Path</button>';
 					}
 					modalDesc.innerHTML = properties.content[3];
 					hideModals();
@@ -690,22 +736,6 @@
 		  	}
   		}
 
-  		//"Help me" feature functions
-  		function getClosestEventControl() {
-  			directionsNow = true;
-  			//Need a location to proceed
-  			if (curLocation == undefined) {
-  				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>Wait! Where are you?</h3><br><p>To find the nearest event, you can use your current location or enter an address that's of interest to you.</p><br><br><button class='btn btn-info btn-block' onclick='getUserLocation()' id='use-my-location'>Use my location!</button>";
-  				hideModals();
-  				$('#warning-modal').show();
-  			}
-  			//Location is entered, proceed to getting closest event
-  			else {
-  				warningModal.innerHTML = "<span class='close' id='modal-close' onclick='hideModals()'>&times;</span><br><h3>We're here to help!</h3><br><p>We've found your nearest event. Take a look and if you're interested, hit 'Get Directions' and head on over!</p><br><br><button class='btn btn-info btn-block' onclick='getClosestEvent()' id='check-it-out'>Let's Check it Out!</button>";
-  				hideModals();
-  				$('#warning-modal').show();
-  			}
-  		}
   		function getClosestEvent() {
   			//Close warning modal
 		    $('#warning-modal').hide();
