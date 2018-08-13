@@ -411,13 +411,19 @@
     border-radius: 10px;
     padding: 15px 20px 20px 20px;
 }
-#use-my-location, #check-it-out, #weather-check {
+#use-my-location, #check-it-out, #weather-done {
     font-size: 15px;
     padding: 8px 12px;
     position: absolute;
     width: 90%;
     bottom: 5%;
     right: 5%;
+}
+@media only screen and (min-width : 667px) {    
+    #get-started-1, #get-started-2, #categoryTip-done, #walkTimeTip-done, #closestEventTip-done, #weather-done, #done-button, #help-me-button, #use-my-location {
+        width: 80%;
+        left: 10%;
+    }
 }
 
 
