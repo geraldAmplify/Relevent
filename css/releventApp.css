@@ -475,7 +475,7 @@ html, body {
 }
 
 
-/***************** The events modal (background) *****************/
+/***************** The event modals *****************/
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
