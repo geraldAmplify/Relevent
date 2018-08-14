@@ -60,8 +60,9 @@
 </head>
 
 <body>
+	<!-- Header items -->
 	<div class="container-fluid" id="header">
-
+		<!-- 1st Row -->
 	  	<div class="row" id="navigation">
 	    	<div class="col-2" id="logoCol">
 	      		<img id="logo-R" src="designAssets/Logo-Img-White.svg" height="100%">
@@ -76,16 +77,14 @@
     			<button id="weather-btn" class="btn btn-warning"><img id="weather-icon" src="designAssets/weather-temp.png"></button>
     		</div>
   		</div>
-
+  		<!-- 2nd Row -->
 	  	<div class="btn" id="settings">
 			<button class="btn btn-info" id="categories">Event Type &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
 			<button class="btn btn-info" id="ages">Ages &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
 			<button class="btn btn-info" id="walk-time">Walk Time &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
 			<button class="btn btn-info" id="features">More &nbsp;<img src="designAssets/DownArrow.png" height="6" width="9"></button>
 	 	</div>
-	  	
 	</div>
-
 
 	<!-- Onboarding Modal -->
 	<div id="onboarding-layer">
@@ -93,7 +92,6 @@
 			<span class='close' id='modal-close' onclick='hideModals()'>&times;</span>
 			<br>
 			<div class="onboarding-container">
-
 				<div class="mySlides fade">
 					<h4 id="onboarding-title">Welcome to Relevent</h4>
 					<div style="display: flex">
@@ -112,7 +110,6 @@
 		<div id="categoryTip-modal">
 			<br>
 			<div class="categoryTip-container">
-
 				<div class="mySlides fade">
 					<h4 id="categoryTip-title">Find Relevant Activities</h4>
 					<div style="display: flex">
@@ -130,7 +127,6 @@
 		<div id="walkTimeTip-modal">
 			<br>
 			<div class="walkTimeTip-container">
-
 				<div class="mySlides fade">
 					<h4 id="walkTimeTip-title">Location, Location, Location</h4>
 					<div style="display: flex">
@@ -148,7 +144,6 @@
 		<div id="closestEventTip-modal">
 			<br>
 			<div class="closestEventTip-container">
-
 				<div class="mySlides fade">
 					<h4 id="closestEventTip-title">We're here to help!</h4>
 			  		<div id="closestEventTip-text"><p>This feature finds the nearest event to your set location so you can take your kids out to burn off some energy!</p></div>
@@ -162,7 +157,7 @@
 	<!-- Weather Modal -->
 	<div id="weather-modal"></div>
 
-	<!-- Settings Modal -->
+	<!-- Settings (2nd row) Modal -->
 	<div id="settings-modal"></div>
 
 	<!-- Get Location Modal (Help Me Feature) -->
@@ -201,21 +196,22 @@
 		var map;
 		var infoWindow;
 		var pos, new_lat, new_lng, cur_lat, cur_lng, curLocation;
-		var walkTime;
-		var walkTimeLimit = 20;
+		var walkTimeLimit = 20; //initialize events within 20 min walk limit
 		var curPosCnt = 0;
 		var curPos = [];
 		var eventMarkers = [];
-		var isUserLocation = false;
-		var directionsNow = false;
+		var isUserLocation = false; //user location found
+		var directionsNow = false; //require directions immediately ("Help Me" feature)
 		var directionsService, directionsDisplay;
 		var eventWalkTimes = [];
-		var eventsToday = [];	 
+		var eventsToday = [];	
+
 	 	var dateObj = new Date();
 		var year = dateObj.getUTCFullYear();
 		var month = dateObj.getUTCMonth() + 1; //months from 1-12
 		var day = dateObj.getUTCDate();
 
+		//Flags for keeping track of active event types
 		var selectAll = true;
 		var selectActive = false;
 		var selectArts = false;
@@ -227,14 +223,14 @@
 		var categoryTextColors = ['white','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5','#6CC3D5'];
 		var categoryIconColors = ["White", "Blue", "Blue", "Blue", "Blue", "Blue", "Blue"];
 
-		//Get the modals for settings and warnings
+		//Get modals
 		var weatherModal = document.getElementById('weather-modal');
 		var settingsModal = document.getElementById('settings-modal');
 		var warningModal = document.getElementById('warning-modal');
 		settingsModal.style.display = "none";
 		//Get the modal for infocards
 		var modal = document.getElementById('events-modal');
-		//Switch settings modals
+		//Initialize settings selected
 		var isCategories = false;
 		var isAges = false;
 		var isWalkTime = false;
@@ -252,12 +248,14 @@
 				isWalkTime = false;
 				isFeatures = false;
 				setTimeout(function () {
+					//Fix screen size for android devices
 			        let viewheight = parseInt($(window).height(), 10);
 			        let viewwidth = parseInt($(window).width(), 10);
 			        let viewport = document.querySelector("meta[name=viewport]");
 			        viewport.setAttribute("content", "height=" + viewheight + "px, width=" + viewwidth + "px, initial-scale=1.0");
 			    }, 300);
 			});
+			//Weather button
 			$('#weather-btn').click(function() {
 				$('#settings-modal').hide();
 				$('#warning-modal').hide();
@@ -326,7 +324,6 @@
 						}
 					}
 		    	}
-		    	
 				//UX when closing settings taps
 				$('#weather-modal').hide();
 		    	$('#warning-modal').hide();
@@ -362,15 +359,16 @@
 		    });
 		    //Close infocards
 		    $('#modal-close').click(function() {
-		    	setZoom();
 		    	isCategories = false;
 		    	isAges = false;
 				isWalkTime = false;
 				isFeatures = false;
+				setZoom();
 		    	hideModals();
 		    });
 		});
-
+		
+		//Overlaying "get user location" button on map
 		function userLocationControl(controlDiv, map) {
 	        //Set CSS for the control border.
 	        var controlUI = document.createElement('div');
@@ -443,6 +441,7 @@
 			});
 			directionsDisplay.setMap(map);
 
+			/***************** Initialize the map on start up *****************/
 			//Get events happening today
 			for (var i = 0; i < data.length; i++) {
 			  	if (sameDate(data[i], year, month, day)) {
@@ -477,8 +476,9 @@
 	      			
 	    }
 
+	    /***************** Onboarding Options *****************/
 		//HTML5 Geolocation (onboarding option #1)
-		var walkingBuffer = 0.00032;
+		var walkingBuffer = 0.00032; //20m equivalent in lat,lng coords
 	    function getUserLocation() {
 		    if (navigator.geolocation) {
 		    	if (isUserLocation == false) {
@@ -503,8 +503,7 @@
 			            	cur_lat = new_lat;
 			            	cur_lng = new_lng;
 			            	isUserLocation = true;
-		    				//Get address of current location
-							reverseGeocode(cur_lat, cur_lng);
+							reverseGeocode(cur_lat, cur_lng); //Get address of current location
 							setTimeout(() => {
 							      	clearMarkers();
 		    						updateFilter();
@@ -545,6 +544,7 @@
     		hideModals();
     		$("#search-location").trigger("select");
     		setTimeout(function () {
+    			//Fix screen size for android devices
 		        let viewheight = parseInt($(window).height(), 10);
 		        let viewwidth = parseInt($(window).width(), 10);
 		        let viewport = document.querySelector("meta[name=viewport]");
@@ -552,13 +552,12 @@
 		    }, 200);
 	    }
 
-		//Autocomplete address fields
+	    /***************** Autocomplete address field *****************/
 		function initAutocomplete() {
-			//var autocomplete = new google.maps.places.Autocomplete(document.getElementById('new-event-location'), {types: ['geocode']});
 			var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search-location'), {types: ['geocode']});
 		}
 
-		//***** Check for cookies *****
+		/***************** Functions for checking cookies *****************/
 		//Check for category tip cookie
 		function categoryTip() {
 			var myCookie = getCookie("categoryTip"); //get cookie if it exists
@@ -596,10 +595,9 @@
 					getClosestEvent();
 	  			}
 		 	}
- 			
-		 	
 		}
-		//***** Create cookies *****
+
+		/***************** Functions for creating cookies *****************/
 		//Create cookie to not show category tip again
 	 	function makeCategoryCookie() { 
 			//create cookie
@@ -627,15 +625,13 @@
 		//Checks if cookies exists
 		function getCookie(name) { 
 		 	var dc = document.cookie;
-		 	var prefix = name +"=";
+		 	var prefix = name + "=";
 		 	var begin = dc.indexOf("; " + prefix);
-		 	if (begin == -1) //cookie doesn’t exist yet
-		 	{
+		 	if (begin == -1) {//cookie doesn’t exist yet
 		 		begin = dc.indexOf(prefix);
 		 		if (begin != 0) return null;
 		 	}
-		 	else //cookie does exist
-		 	{
+		 	else { //cookie does exist
 		 		begin += 2;
 		 		var end = document.cookie.indexOf(";", begin);
 		 		if (end == -1) {
@@ -645,6 +641,7 @@
 		 	return decodeURI(dc.substring(begin + prefix.length, end));
 		}
 		
+		/***************** Manipulating markers *****************/
 	    //Add current position marker
 		function addMarkerCurPos(properties) {
 			var marker = new google.maps.Marker({
@@ -661,7 +658,6 @@
 		var modalWalkTime = document.getElementById('modal-walkTime');
 		var modalDirections = document.getElementById('modal-directions');
 		var modalDesc = document.getElementById('modal-description');
-
 		//Add event marker
 		function addMarker(properties) {
 			var marker = new google.maps.Marker({
@@ -705,7 +701,8 @@
         	eventMarkers = [];
   		}
 
-  		//Get nearest event for "Help Me" feature
+  		/***************** Get Events *****************/
+  		//Keep nearest event for "Help Me" feature
   		var nearestEventNum;
   		//Update map with events that are within walking distance
   		function getEvents(events) {
@@ -740,14 +737,14 @@
 		  	}
   		}
 
-  		function getClosestEvent() {
+		function getClosestEvent() {
   			//Close warning modal
 		    $('#warning-modal').hide();
 		    //Select nearest event marker
 		    google.maps.event.trigger(eventMarkers[nearestEventNum-1], 'click');
   		}
 
-  		//Close the onboarding and warning modals
+  		/***************** Close the onboarding and warning modals *****************/
   		function hideModals() {
   			isCategories = false;
 			isAges = false;
@@ -763,7 +760,8 @@
   			$('#events-modal').hide();
   		}
 
-  		//Convert addr to lat,lng - center search result
+  		/***************** Geocoding functions *****************/
+  		//Convert address to lat,lng - center search result
   		function geocodeSearch(e) {
 			e.preventDefault();
 
@@ -797,10 +795,8 @@
 					//Clear text field
 					document.getElementById('search-location').value = "";
 			    } 
-			}); 
-			
+			});
 		}
-
 		//Convert lat,lng to address
 		function reverseGeocode(cur_lat, cur_lng) {
 			$.ajax({url: "https://maps.googleapis.com/maps/api/geocode/json?latlng="+cur_lat+","+cur_lng+"&sensor=false", success: function(result) {
@@ -808,7 +804,7 @@
 			}});
 		}
 
-		//Set map zoom based on walk time setting
+		/***************** Set map zoom based on walk time setting *****************/
 		function setZoom() {
 			if (walkTimeLimit > 25 && walkTimeLimit <= 30) {
 				map.setZoom(13);
@@ -819,26 +815,26 @@
 			}
 		}	
 
+		/***************** Calculate walk time from user to events *****************/
 		var R = 6378137; //Radius of the Earth in meters
 		var dLat, dLng, a, c;
-		//Calculate distance between user and event
 		function calculateWalkTime(cur_lat, cur_lng, event_lat, event_lng) {
 			// return Math.ceil((google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(cur_lat, cur_lng), new google.maps.LatLng(event_lat, event_lng)))/80);
 		    dLat = event_lat * Math.PI / 180 - cur_lat * Math.PI / 180;
 		    dLng = event_lng * Math.PI / 180 - cur_lng * Math.PI / 180;
 		    a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(cur_lat * Math.PI / 180) * Math.cos(event_lat * Math.PI / 180) * Math.sin(dLng/2) * Math.sin(dLng/2);
 		    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		    return Math.ceil((R*c)/80);
+		    return Math.ceil((R*c)/80); //returns time in mins
 		}
 
-		//get directions from user to event
+		/***************** Get directions from user to event *****************/
 		function getDirections(curLocation, eventLocation) {
 			directionsService.route({
 	          	origin: curLocation,
 	          	destination: eventLocation,
 	          	travelMode: 'WALKING'
 	        }, function(response, status) {
-	          	if (status === 'OK') {
+	          	if (status === 'OK') { //Directions stored in 'response'
 	            	directionsDisplay.setDirections(response);
 	            	modal.style.display = "none";
 	          	} else {
@@ -847,38 +843,7 @@
 	        });
 		}
 
-		var date, target, stringDates, splitted;
-		//Return true if an event is happening on a given date.
-		function sameDate(event, year, month, day) {
-			date = convertDates(event);
-			target = [year, month, day];
-			for (var i = 0; i < date.length; i++) {
-				if (equalDates(date[i], target)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		function equalDates(date1, date2) {
-			return date1[0] == date2[0] && date1[1] == date2[1] && date1[2] == date2[2];
-		}
-		//Convert all the dates of an event from string format to an array of integers.
-		function convertDates(event) {
-			stringDates = event.dates;
-		  	var dates = []//Converted dates, where each date is an array of integers.
-		  	for (var i = 0; i < stringDates.length; i++) {
-		  		dates.push(convertDate(stringDates[i]));
-		  	}
-		  	return dates;
-		}
-		// Event dates are stored as a string. Converting it to an array of integers makes it easier to handle.
-		function convertDate(dateString) {
-			splitted = dateString.split("-");
-			year = parseInt(splitted[0]);
-			month = parseInt(splitted[1]);
-			day = parseInt(splitted[2]);
-			return [year, month, day];
-		}
+		/***************** Initialize the event type setting *****************/
 		//Initialize filters setting
 		function initCategories(allBtn,allTxt,activeBtn,activeTxt,artsBtn,artsTxt,familyBtn,familyTxt,foodBtn,foodTxt,freeBtn,freeTxt,musicBtn,musicTxt) {
 			return '<div class="container-fluid">' +
@@ -1188,8 +1153,7 @@
 			}
 			isUpdateAll();
 		}
-
-		//Update events that appear
+		//Update events that appear on the map
 		function updateFilter() {
 			if (selectAll) {
 				getEvents(eventsToday);
@@ -1212,6 +1176,41 @@
 			getEvents(filteredEvents);
 		}
 
+		/***************** Return events that are happening on the given day *****************/
+		var date, target, stringDates, splitted;
+		//Return true if an event is happening on a given date.
+		function sameDate(event, year, month, day) {
+			date = convertDates(event);
+			target = [year, month, day];
+			for (var i = 0; i < date.length; i++) {
+				if (equalDates(date[i], target)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		function equalDates(date1, date2) {
+			return date1[0] == date2[0] && date1[1] == date2[1] && date1[2] == date2[2];
+		}
+		//Convert all the dates of an event from string format to an array of integers.
+		function convertDates(event) {
+			stringDates = event.dates;
+		  	var dates = []//Converted dates, where each date is an array of integers.
+		  	for (var i = 0; i < stringDates.length; i++) {
+		  		dates.push(convertDate(stringDates[i]));
+		  	}
+		  	return dates;
+		}
+		// Event dates are stored as a string. Converting it to an array of integers makes it easier to handle.
+		function convertDate(dateString) {
+			splitted = dateString.split("-");
+			year = parseInt(splitted[0]);
+			month = parseInt(splitted[1]);
+			day = parseInt(splitted[2]);
+			return [year, month, day];
+		}
+
+		/***************** Return events with the same event type selected *****************/
 		//Mapping of all event categories to UI categories
 		var categoryMap = {
 			"free" : null,
@@ -1271,7 +1270,6 @@
 		  	}
 			return allSubcategories;
 		}
-
 
 	</script>
 
